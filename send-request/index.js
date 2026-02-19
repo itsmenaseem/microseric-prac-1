@@ -24,7 +24,7 @@ async function get(url){
 
 // create a post 
 
-post("http://localhost:3000/api/post",{content:"new post!"});
+// post("http://localhost:3000/api/post",{content:"new pos1223t!"});
 
 // query all posts
 
@@ -32,4 +32,4 @@ get("http://localhost:3003/api/posts");
 
 // create a comment for a post
 
-post("http://localhost:3001/api/post/f4a3382b:/comment",{content:"new comment!"});
+// post("http://localhost:3001/api/post/d4cc83cf/comment",{content:"new comment!"});

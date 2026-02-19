@@ -1,0 +1,64 @@
+
+# deployment 
+apiVersion: apps/v1
+
+kind: Deployment
+metadata:
+    name: query-service
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: query-service
+    template:
+        metadata:
+            labels:
+                app: query-service
+        spec:
+            containers:
+                - name: query-service
+                  image: sidnaseem/query-service:latest
+    
+
+
+---
+# NodePort for access it outside of cluster
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+    name : query-service-nodePort
+spec:
+    type: NodePort
+    selector:
+        app: query-service
+    ports:
+        - name: query-service-nodePort-srv
+          protocol: TCP
+          port: 3003
+          targetPort: 3003
+
+
+
+---
+# cluster_ip access other pods inside k8s cluster
+
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+    name: query-service-clus-ip
+spec:
+    type: ClusterIP
+    selector:
+        app: query-service
+    ports:
+        - name: query-service-clus-ip-srv
+          protocol: TCP
+          port: 3003
+          targetPort: 3003
+
