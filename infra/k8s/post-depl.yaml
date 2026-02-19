@@ -1,60 +1,64 @@
 
 # deployment 
-
 apiVersion: apps/v1
+
 kind: Deployment
-
 metadata:
-  name: post-depl
-
+    name: post-service
 spec:
-  replicas: 1
+    replicas: 1
+    selector:
+        matchLabels:
+            app: post-service
+    template:
+        metadata:
+            labels:
+                app: post-service
+        spec:
+            containers:
+                - name: post-service
+                  image: sidnaseem/post-service:latest
+    
 
-  selector:
-    matchLabels:
-      app: posts
-
-  template:
-    metadata:
-      labels:
-        app: posts
-
-    spec:
-      containers:
-        - name: post-service
-          image: sidnaseem/post-service:latest
 
 ---
 # NodePort for access it outside of cluster
+
 apiVersion: v1
 
 kind: Service
 
 metadata:
-  name: post-srv
+    name : post-service-nodePort
 spec:
-  type: NodePort
-  selector:
-    app: posts
-  ports:
-    - name: posts
-      protocol: TCP
-      port: 3000
-      targetPort: 3000
+    type: NodePort
+    selector:
+        app: post-service
+    ports:
+        - name: post-service-nodePort-srv
+          protocol: TCP
+          port: 3000
+          targetPort: 3000
+
+
 
 ---
 # cluster_ip access other pods inside k8s cluster
 
+
 apiVersion: v1
 
 kind: Service
+
 metadata:
-  name: post-clus-srv
+    name: post-service-clus-ip
 spec:
-  type: ClusterIP
-  selector:
-    app: posts
-  ports:
-    - name: posts
-      port: 3000
-      targetPort: 3000
+    type: ClusterIP
+    selector:
+        app: post-service
+    ports:
+        - name: post-service-clus-ip-srv
+          protocol: TCP
+          port: 3000
+          targetPort: 3000
+
