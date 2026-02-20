@@ -1,0 +1,64 @@
+
+# deployment 
+apiVersion: apps/v1
+
+kind: Deployment
+metadata:
+    name: event-service
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: event-service
+    template:
+        metadata:
+            labels:
+                app: event-service
+        spec:
+            containers:
+                - name: event-service
+                  image: sidnaseem/event-service:latest
+    
+
+
+---
+# NodePort for access it outside of cluster
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+    name : event-service-nodeport
+spec:
+    type: NodePort
+    selector:
+        app: event-service
+    ports:
+        - name: event-service-nodeport-srv
+          protocol: TCP
+          port: 3000
+          targetPort: 3000
+
+
+
+---
+# cluster_ip access other pods inside k8s cluster
+
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+    name: event-service-clus-ip
+spec:
+    type: ClusterIP
+    selector:
+        app: event-service
+    ports:
+        - name: event-service-clus-ip-srv
+          protocol: TCP
+          port: 3000
+          targetPort: 3000
+
