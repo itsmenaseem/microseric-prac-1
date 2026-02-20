@@ -16,6 +16,10 @@ async function sendEvent(url,event) {
     }
 }
 
+app.get("/test",(req,res)=>{
+    res.send("Hello World");
+})
+
 app.post("/api/events",async (req,res)=>{
     const event = req.body;
     events.push(event);
